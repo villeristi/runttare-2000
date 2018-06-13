@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Coming+Soon');
+
+$orange: #e74c3c;
+$blue: #3498db;
+$twitter: #55acee;
+$facebook: #3b5998;
+$linkedin: #007bb5;
+$shadow: darken($blue, 10%);
+
 ::selection {
   background: $brand-primary;
   color: #fff;
@@ -16,6 +25,58 @@
   text-shadow: 0px 0px 0px;
 }
 
+@mixin button($color: $blue) {
+  @include transition;
+  border: none;
+  font-family: inherit;
+  border-radius: 5px;
+  padding: 2rem 3rem;
+  font-size: 4rem;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 20px;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+  background-color: $color;
+  box-shadow: 0 5px 0 0 darken($color, 10%);
+  text-shadow: 0 1px .5px rgba(0, 0, 0, 0.6);
+
+  &:hover {
+    background-color: lighten($blue, 5%);
+    transform: translate(0px, 2px);
+    -webkit-transform: translate(0px, 2px);
+    box-shadow: 0 3px 0 0 darken($color, 10%);
+  }
+
+  &:active {
+    transform: translate(0px, 5px);
+    -webkit-transform: translate(0px, 5px);
+    box-shadow: 0 1px 0 0 darken($color, 10%);
+  }
+
+  &:disabled {
+    background-color: lighten($color, 5%);
+    transform: translate(0px, 2px);
+    -webkit-transform: translate(0px, 2px);
+    box-shadow: 0 3px 0 0 darken($color, 10%);
+    cursor: not-allowed;
+    animation: background-loader 1s ease-in-out infinite;
+  }
+
+  @keyframes background-loader {
+    0% {
+      background-color: darken($color, 10%);
+    }
+    50% {
+      background-color: lighten($color, 10%);
+    }
+    100% {
+      background-color: darken($color, 10%);
+    }
+  }
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -24,4 +85,8 @@ html {
 
 body {
   padding-top: 5em;
+}
+
+.runtta__btn {
+  @include button;
 }

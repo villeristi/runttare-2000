@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack/development.js --progress --hot --color",
-    "dashboard": "webpack-dashboard -c magenta -t 'Vue.js-Advanced-Starter-Template' -- webpack-dev-server --config webpack/development.js --progress --hot --color",
+    "dashboard": "webpack-dashboard -c magenta -t 'Runtare 2000' -- webpack-dev-server --config webpack/development.js --progress --hot --color",
     "build": "webpack --config webpack/production.js -p --progress"
   },
   "devDependencies": {

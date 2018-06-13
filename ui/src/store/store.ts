@@ -3,15 +3,17 @@ import Vuex from 'vuex';
 import mutations from './mutations';
 import actions from './actions';
 import getters from './getters';
-import { posts } from '../components/Posts/store';
-import { PostsState } from '../components/Posts/types';
+import { users } from '../components/Users/store';
+import { UsersState } from '../components/Users/types';
+import { runts, RunttaState } from '../components/Home/store';
 
 import { isProduction } from '../util/helpers';
 
 Vue.use(Vuex);
 
 export interface RootState {
-  posts: PostsState;
+  users: UsersState;
+  runts: RunttaState;
   isFetching: boolean;
 }
 
@@ -25,7 +27,8 @@ export default new Vuex.Store({
   getters,
   mutations,
   modules: {
-    posts,
+    users,
+    runts,
   },
   strict: !isProduction,
 });
