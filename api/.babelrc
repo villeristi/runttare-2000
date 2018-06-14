@@ -7,7 +7,7 @@
   "plugins": [
     ["module-resolver", {
       "extensions": [".ts", ".tsx"],
-      "root": [".api/src"]
+      "root": ["./src"]
     }]
   ]
 }
