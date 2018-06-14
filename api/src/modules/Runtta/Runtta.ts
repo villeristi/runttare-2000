@@ -7,7 +7,7 @@ const sleep = (timeout = 2000) => new Promise((resolve, reject) => {
   setTimeout(() => resolve(true), timeout);
 });
 
-export default class RunttaRoute extends BaseRoute {
+export default class Runtta extends BaseRoute {
 
   method = 'POST';
   endpoint = '/';
