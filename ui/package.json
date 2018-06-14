@@ -19,12 +19,9 @@
     "type": "git",
     "url": "git@github.com:villeristi/vue.js-advanced-starter-template.git"
   },
-  "config": {
-    "port": 3000
-  },
   "scripts": {
     "start": "webpack-dev-server --config webpack/development.js --progress --hot --color",
-    "dashboard": "webpack-dashboard -c magenta -t 'Runtare 2000' -- webpack-dev-server --config webpack/development.js --progress --hot --color",
+    "dashboard": "webpack-dashboard -c magenta -t 'Runttare 2000' -- webpack-dev-server --config webpack/development.js --progress --hot --color",
     "build": "webpack --config webpack/production.js -p --progress"
   },
   "devDependencies": {
