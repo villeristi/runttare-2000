@@ -9,7 +9,9 @@ import { debugMiddleware } from './common/util/debug';
 import App from './app';
 
 import IndexRoute from './modules/index/Index';
-import RunttaRoute from './modules/Runtta/runttaRoute';
+import RunttaRoute from './modules/runtta/Runtta';
+import UserList from './modules/users/UserList';
+import UserCreate from './modules/users/UserCreate';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -30,5 +32,7 @@ app
   .route([
     IndexRoute,
     RunttaRoute,
+    UserList,
+    UserCreate,
   ])
   .serve();

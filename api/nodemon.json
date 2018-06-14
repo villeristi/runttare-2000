@@ -13,6 +13,6 @@
   ],
   "verbose": true,
   "watch": [
-    "api/src"
+    "src"
   ]
 }

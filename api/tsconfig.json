@@ -30,5 +30,6 @@
   "include": [
     "decl/*",
     "src/**/*"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }
