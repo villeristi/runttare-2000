@@ -7,9 +7,7 @@ EXPOSE 3001:3001
 RUN mkdir -p /app
 WORKDIR /app
 
-RUN rm -rf node_modules
-
-COPY package.json /app/package.json
+COPY package.json /app
 
 RUN yarn --silent
 
