@@ -1,17 +1,3 @@
-FROM blairguk/node-sass-alpine:8.11.0
+FROM nginx:alpine
 
-ENV NODE_ENV production
-ENV PORT 3000
-EXPOSE 3000:3000
-
-RUN mkdir -p /app/dist
-WORKDIR /app
-
-COPY package.json /app
-
-RUN yarn
-
-COPY . /app
-
-RUN yarn build
-#CMD ["node", "./dist/index"]
+COPY ./dist /usr/share/nginx/html
