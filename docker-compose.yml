@@ -9,3 +9,14 @@ services:
     volumes:
       - ./api:/app/api
     restart: always
+  ui:
+    container_name: runttare_ui
+    build: ./ui
+    command: yarn start
+    ports:
+      - 3000:3000
+    volumes:
+      - ./ui:/app
+    restart: always
+    depends_on:
+      - api
