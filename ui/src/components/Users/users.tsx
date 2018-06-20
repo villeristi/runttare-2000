@@ -10,7 +10,6 @@ export default class Users extends Vue {
 
   @UsersGetter('all') users;
   @UsersAction('fetchAllUsers') fetchUsers;
-
   animation: string = 'flipInX';
   animationDelay: number = 25; // in ms
 
@@ -49,11 +48,11 @@ export default class Users extends Vue {
           onBeforeEnter={this.handleBeforeEnter}
           onEnter={this.handleEnter}>
 
-          {this.users.map((post, index) => (
-            <li key={post.id}
+          {this.users.map((user, index) => (
+            <li key={index}
                 class="list-group-item"
                 data-index={index}>
-              <strong>{index + 1} x&nbsp;</strong> <i class="fa fa-beer"/> &nbsp;: {post.title}
+              <strong>{user.runttares} x&nbsp;</strong> <i class="fa fa-beer"/> &nbsp;: {user.username}
             </li>
           ))}
 

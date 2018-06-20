@@ -1,8 +1,8 @@
 import store from '../store/store';
-import { postsResource } from '../util/resources';
+import { usersResource } from '../util/resources';
 
 // Request interceptor
-postsResource.interceptors.request.use((config) => {
+usersResource.interceptors.request.use((config) => {
   store.commit('toggleFetching', true);
   return config;
 }, (error) => {
@@ -12,7 +12,7 @@ postsResource.interceptors.request.use((config) => {
 });
 
 // Response interceptor
-postsResource.interceptors.response.use((response) => {
+usersResource.interceptors.response.use((response) => {
   store.commit('toggleFetching', false);
   return response;
 }, (error) => {

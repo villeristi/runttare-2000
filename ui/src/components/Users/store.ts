@@ -1,5 +1,5 @@
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
-import { postsResource } from '../../util/resources';
+import { usersResource } from '../../util/resources';
 import { UsersState } from './types';
 import { RootState } from '../../store/store';
 
@@ -22,11 +22,11 @@ const mutations: MutationTree<UsersState> = {
 
 const actions: ActionTree<UsersState, RootState> = {
   async fetchAllUsers({ commit, dispatch, rootState }) {
-    const { data } = await postsResource.get('/');
+    const { data } = await usersResource.get('/');
     commit('setUsers', data);
   },
   async createUser({ commit, dispatch, rootState }, userData) {
-    const { data } = await postsResource.post('/', userData);
+    const { data } = await usersResource.post('/', userData);
   },
 
 };
