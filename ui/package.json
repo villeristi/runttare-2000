@@ -1,7 +1,7 @@
 {
-  "name": "vue.js-advanced-starter-template",
+  "name": "runttare-2000-ui",
   "version": "0.1.0",
-  "description": "An advanced starter for Vue.js-projects",
+  "description": "AI-powered IoT device for finnish midsummer",
   "keywords": [
     "vue.js",
     "vuex",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:villeristi/vue.js-advanced-starter-template.git"
+    "url": "git@github.com:villeristi/runttare-2000.git"
   },
   "scripts": {
     "start": "webpack-dev-server --mode=development --config webpack/development.js --progress --hot --color",
