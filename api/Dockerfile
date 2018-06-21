@@ -1,4 +1,4 @@
-FROM node:9
+FROM arm32v6/node:9-alpine
 
 ENV NODE_ENV production
 ENV PORT 3001
