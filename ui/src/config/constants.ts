@@ -1,2 +1,2 @@
 // A global API-root
-export const API_BASE = 'http://localhost:3001';
+export const API_BASE = process.env.API_URL || 'http://localhost:3001';
