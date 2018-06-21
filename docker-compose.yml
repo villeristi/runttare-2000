@@ -1,18 +1,22 @@
 version: '3'
 services:
   api:
-    container_name: runttare_api
     build: ./api
+    container_name: runttare_api
     command: yarn start
+    environment:
+      - PORT=3001
     ports:
       - 3001:3001
     volumes:
       - ./api:/app/api
     restart: always
   ui:
-    container_name: runttare_ui
     build: ./ui
     command: yarn start
+    container_name: runttare_ui
+    environment:
+      - API_URL=http://localhost:3001
     ports:
       - 3000:3000
     volumes:
