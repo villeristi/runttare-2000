@@ -7,13 +7,20 @@ from fastapi import (
     WebSocketDisconnect,
 )
 
-from fastapi.concurrency import run_in_threadpool
-
 from loguru import logger
+
+try:
+    import RPi.GPIO as GPIO
+except (ImportError, RuntimeError):
+    import sys
+    import fake_rpi
+
+    sys.modules['RPi'] = fake_rpi.RPi
+    sys.modules['RPi.GPIO'] = fake_rpi.RPi.GPIO
 
 from .db import create_table
 from .websocket import websocketManager
-from .runtta import runttare, make_runtta
+from .runtta import make_runtta
 
 app = FastAPI()
 

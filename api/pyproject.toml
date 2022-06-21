@@ -12,9 +12,9 @@ asyncio = "^3.4.3"
 fastapi = "^0.78.0"
 gunicorn = "^20.1.0"
 loguru = "^0.6.0"
-SimulRPi = "0.1.0a1"
 uvicorn = "^0.17.6"
 websockets = "^10.3"
+fake-rpi = "^0.7.1"
 
 [tool.poetry.dev-dependencies]
 

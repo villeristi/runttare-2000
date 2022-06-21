@@ -1,11 +1,6 @@
 from pydantic import BaseModel
-
-try:
-    import RPi.GPIO as GPIO
-except (ImportError, RuntimeError):
-    import SimulRPi.GPIO as GPIO
-
-GPIO.setmode(GPIO.BOARD)
+from loguru import logger
+import RPi.GPIO as GPIO
 
 
 class Raspi(BaseModel):
@@ -13,6 +8,7 @@ class Raspi(BaseModel):
     pin_out: int
 
     def init(self):
+        GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin_in, GPIO.IN)
         GPIO.setup(self.pin_out, GPIO.OUT)
 
@@ -21,9 +17,11 @@ class Raspi(BaseModel):
         return self
 
     def trigger(self):
+        logger.debug("Triggering")
         GPIO.output(self.pin_out, GPIO.HIGH)
 
     def drawback(self):
+        logger.debug("Drawback")
         GPIO.output(self.pin_out, GPIO.LOW)
 
 

@@ -9,7 +9,10 @@ ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED 1
 ENV TINI_VERSION v0.19.0
 
-RUN apt update -y && apt-get install -y python3-dev build-essential
+RUN apt update -y && apt-get install -y \
+    python3-dev \
+    build-essential \
+    git
 
 RUN addgroup --system fastapi \
     && adduser --system --ingroup fastapi fastapi
