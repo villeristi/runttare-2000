@@ -1,63 +1,67 @@
 import React, { useState, useCallback } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import classNames from 'classnames';
+import useAxios from 'axios-hooks'
 
 import Header from './components/Header';
-import Footer from './components/Footer';
+import RunttaBtn from './components/RunttaBtn';
 
 import './components/runtta.css';
-import {ReactComponent as Fist} from './assets/fist.svg';
-import {ReactComponent as HourGlass} from './assets/hourglass.svg';
 
-const SOCKET_URL = process.env.REACT_APP_BROKER_URL || 'ws://192.168.0.104:8000/ws';
+const SOCKET_URL = process.env.REACT_APP_BROKER_URL || 'ws://192.168.0.126:8000/ws';
+const API_URL = 'http://192.168.0.126:8000/runtta';
+
+interface RunttaMsg {
+  type: 'status' | 'count';
+  value: 'idle' | 'busy' | number;
+}
 
 export const App = () => {
-  const [error, setError] = useState<any>(null);
+  // const [error, setError] = useState<any>(null);
   const [processing, setProcessing] = useState<boolean>(false);
   const [beerCount, setBeerCount] = useState<number>(0);
 
-  const { sendJsonMessage, readyState } = useWebSocket(SOCKET_URL, {
+  const [
+    { loading: runttaLoading, error: apiError },
+    executePut
+  ] = useAxios(
+    {
+      url: API_URL,
+      method: 'PUT'
+    },
+    { manual: true }
+  )
+
+  const { readyState } = useWebSocket(SOCKET_URL, {
     onOpen: () => console.log('opened'),
     onClose: (event: WebSocketEventMap['close']) => console.log('close', event),
     onError: (event: WebSocketEventMap['error']) => {
-      console.log(event);
+      console.error('error', event);
       // setError(event)
     },
     shouldReconnect: (event: WebSocketEventMap['close']) => true,
     onMessage: (event: WebSocketEventMap['message']) => {
-      console.log(JSON.parse(event.data));
-      setBeerCount(beerCount+1);
+      const {type, value}: RunttaMsg = JSON.parse(event.data);
+
+      if(type === 'status') {
+        return setProcessing(value === 'busy');
+      }
+
+      if(type === 'count') {
+        return setBeerCount(Number(value));
+      }
     },
   });
 
-  const handleRuntta = useCallback(() => sendJsonMessage({foo: 'bar'}), [sendJsonMessage]);
-  const handleClickProcessing = useCallback(() => setProcessing(!processing), [setProcessing, processing]);
+  const handleRuntta = useCallback(() => executePut(), [executePut]);
 
   const isReady = readyState === ReadyState.OPEN;
 
   return (
     <>
-      <Header connected={readyState === ReadyState.OPEN} />
+      <Header connected={readyState === ReadyState.OPEN} beerCount={beerCount} />
       <div className='flex flex-1 items-center justify-center'>
-        <button className={classNames('runtta text-white', {'processing': processing, 'waiting': !isReady})}
-                onClick={handleClickProcessing}
-                disabled={!isReady}
-        >
-          {isReady ? (
-            <>
-              <Fist width={50} height={50} className='fill-current'/>
-              <span className='mt-2'>Runtta!</span>
-            </>
-          ) : (
-            <>
-              <HourGlass width={50} height={50} className='fill-current'/>
-              <span className='mt-2'>Vänta...</span>
-            </>
-          )}
-        </button>
+        <RunttaBtn ready={isReady} processing={processing} loading={runttaLoading} handleClick={handleRuntta} />
       </div>
-
-      <Footer count={beerCount}/>
     </>
   );
 };

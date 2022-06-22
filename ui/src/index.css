@@ -12,9 +12,15 @@
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap'); */
+@import url('https://fonts.googleapis.com/css?family=Material+Icons+Round');
 
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 body {
-  font-family: 'Fuzzy Bubbles', cursive;
+  /* font-family: 'Fuzzy Bubbles', cursive; */
+  background: linear-gradient(318.32deg, #c3d1e4 0%, #dde7f3 55%, #d4e0ed 100%);
 }
