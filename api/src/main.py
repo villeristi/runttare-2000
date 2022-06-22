@@ -6,6 +6,7 @@ from fastapi import (
     WebSocket,
     WebSocketDisconnect,
 )
+from fastapi.middleware.cors import CORSMiddleware
 
 from loguru import logger
 
@@ -23,6 +24,13 @@ from .websocket import websocketManager
 from .runtta import make_runtta
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Hooks for startup

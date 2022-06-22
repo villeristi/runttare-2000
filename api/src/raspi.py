@@ -1,3 +1,5 @@
+from os import getenv
+import asyncio
 from pydantic import BaseModel
 from loguru import logger
 import RPi.GPIO as GPIO
@@ -11,14 +13,15 @@ class Raspi(BaseModel):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin_in, GPIO.IN)
         GPIO.setup(self.pin_out, GPIO.OUT)
-
         GPIO.add_event_detect(self.pin_in, GPIO.RISING, callback=self.drawback)
 
         return self
 
-    def trigger(self):
+    async def trigger(self):
         logger.debug("Triggering")
         GPIO.output(self.pin_out, GPIO.HIGH)
+        await asyncio.sleep(int(getenv('RUNTTA_TIMEOUT', 3)))
+        GPIO.output(self.pin_out, GPIO.LOW)
 
     def drawback(self):
         logger.debug("Drawback")

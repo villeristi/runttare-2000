@@ -19,7 +19,7 @@ class Runttare:
     async def runtta(self):
         if not self.busy:
             await self.change_status()
-            raspi.trigger()
+            await raspi.trigger()
             await self.send_success()
 
     async def handle_count(self):
