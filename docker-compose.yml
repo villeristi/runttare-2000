@@ -16,6 +16,7 @@ services:
       - "ENVIRONMENT=LOCAL"
       - "LOG_LEVEL=10"
       - "BASE_URL=http://localhost:8000"
+      - "RUNTTA_TIMEOUT=3"
 
   ui:
     container_name: ui
