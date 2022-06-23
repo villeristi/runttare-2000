@@ -1,7 +1,8 @@
 # ------------------------------------------------------------
 # Base layer
 # ------------------------------------------------------------
-FROM python:3.9-slim as base
+# FROM python:3.8-slim as base
+FROM arm32v6/python:3.8.13-alpine3.16 as base
 
 LABEL maintainer="Wille <villeristimaki@gmail.com>"
 
@@ -9,25 +10,46 @@ ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED 1
 ENV TINI_VERSION v0.19.0
 
-RUN apt-get update -y && apt-get install -y \
-    python3-dev \
-    build-essential \
+# RUN apk -U upgrade
+
+RUN apk add --update --no-cache \
+    alpine-sdk \
+    bash \
+    gcc \
+    git \
     libffi-dev \
-    git
+    libressl-dev \
+    musl-dev \
+    openssl-dev \
+    python3-dev
 
-# RUN apt-get remove -y rustc cargo
-RUN apt-get autoremove -y
-
-# ENV PATH="$HOME/.cargo/bin:$PATH"
-# RUN curl https://sh.rustup.rs -sSf | sh
-# # ENV PATH="/root/.cargo/bin:${PATH}"
-# RUN . $HOME/.cargo/env
-# RUN rustc -V
+# RUN apt-get update -y \
+#     && apt-get install -y \
+#     build-essential \
+#     libffi-dev \
+#     libssl-dev \
+#     python3-dev
 
 RUN addgroup --system fastapi \
     && adduser --system --ingroup fastapi fastapi
 
+# RUN apk del rustc cargo
+
+ENV RUSTUP_USE_HYPER=1
+ENV PATH="$HOME/.cargo/bin:$PATH"
+RUN curl https://sh.rustup.rs -sSf | sh
+
+# ENV PATH="/root/.cargo/bin:${PATH}"
+
 RUN pip install --upgrade pip
+
+# ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+
+# RUN pip install "cryptography>=3.3.0,<4.0.0"
+
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
+
 RUN pip install --no-cache-dir poetry==1.1.*
 
 COPY poetry.lock pyproject.toml /
@@ -41,6 +63,9 @@ RUN chmod +x /tini
 # Production-stage - no dev-dependencies & clear cache
 # ------------------------------------------------------------
 FROM base as production
+
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 RUN poetry config virtualenvs.create false \
     && poetry install --no-dev --no-root \

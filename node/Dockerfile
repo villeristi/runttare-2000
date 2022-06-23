@@ -3,15 +3,17 @@
 # ------------------------------------------------------------
 FROM arm32v6/node:16-alpine3.15 as base
 
-LABEL maintainer="Wille <villeristimaki@gmail.com>"
+# RUN apk add --no-cache python3 py3-pip
+RUN apk add --no-cache g++ make py3-pip
 
-WORKDIR /usr/src/app
+WORKDIR /usr
 
-RUN apk --no-cache add g++ make libpng-dev
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY src ./src
 
-COPY package.json package-lock.json ./
-RUN npm i
-COPY . ./
+RUN ls -a
+RUN npm install
 RUN npm run build
 
 
@@ -20,22 +22,30 @@ RUN npm run build
 # ------------------------------------------------------------
 FROM base as development
 
-WORKDIR /usr/src/app
+WORKDIR /usr
 
-RUN npm i
+COPY package*.json ./
+RUN npm install
 
-CMD npm start
+CMD ["npm","start"]
+
 
 # ------------------------------------------------------------
-# Production-stage - nginx-proxy
+# Production-stage
 # ------------------------------------------------------------
-FROM arm32v6/nginx:1.21.6-alpine as production
+FROM base as production
 
-RUN addgroup --system node_app \
-    && adduser --system --ingroup node_app node_app
+WORKDIR /usr
 
-COPY --chown=node_app:node_app --from=base /usr/src/app/build /usr/share/nginx/html
+COPY package.json ./
+
+RUN npm install --only=production
+
+COPY --from=base /usr/dist .
+
+# RUN npm install pm2 -g
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["pm2-runtime","server.js"]
+CMD ["npm", "start:prod"]

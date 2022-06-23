@@ -3,34 +3,32 @@ services:
 
   api:
     build:
-      context: ./api
+      context: ./node
       target: development
     container_name: api
     restart: on-failure
-    command: bash -c "uvicorn src.main:app --host=0.0.0.0 --port=8000 --log-level=debug --reload --reload-dir=./src --use-colors --workers 4"
+    # command: bash -c "uvicorn src.main:app --host=0.0.0.0 --port=8000 --log-level=debug --reload --reload-dir=./src --use-colors --workers 4"
     volumes:
-      - ./api:/app/
+      - ./node:/usr/
     ports:
       - "8000:8000"
     environment:
-      - "ENVIRONMENT=LOCAL"
-      - "LOG_LEVEL=10"
-      - "BASE_URL=http://localhost:8000"
       - "RUNTTA_TIMEOUT=3"
 
   ui:
     container_name: ui
     build:
       context: ./ui
-      target: development
+      target: production
     restart: on-failure
     volumes:
       - ./ui:/usr/src/app/
       - /usr/src/app/node_modules/
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
       - "REACT_APP_BROKER_URL=ws://localhost:8000/ws"
+      - "REACT_APP_API_URL=http://localhost:8000/runtta"
     depends_on:
       - api
 
