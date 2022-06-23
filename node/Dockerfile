@@ -1,16 +1,22 @@
 # ------------------------------------------------------------
 # Base layer
 # ------------------------------------------------------------
-FROM arm32v6/node:16-alpine3.15 as base
+# FROM arm32v6/node:16-alpine3.15 as base
+FROM node:10-alpine as base
+# FROM balenalib/raspberrypi3-node:16 as base
+# FROM balenalib/raspberrypi3-node:16
 
 # RUN apk add --no-cache python3 py3-pip
 RUN apk add --no-cache g++ make py3-pip
+# RUN apt-get update && apt-get install -yq \
+#     alsa-utils libasound2-dev build-essential python3-dev && \
+#    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 COPY tsconfig.json ./
-COPY src ./src
+COPY . ./
 
 RUN ls -a
 RUN npm install
@@ -22,12 +28,13 @@ RUN npm run build
 # ------------------------------------------------------------
 FROM base as development
 
-WORKDIR /usr
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 RUN npm install
 
-CMD ["npm","start"]
+# CMD ["npm", "run", "start"]
+CMD npm start
 
 
 # ------------------------------------------------------------
@@ -35,17 +42,17 @@ CMD ["npm","start"]
 # ------------------------------------------------------------
 FROM base as production
 
-WORKDIR /usr
+WORKDIR /usr/src/app
 
 COPY package.json ./
 
 RUN npm install --only=production
 
-COPY --from=base /usr/dist .
+COPY --from=base /app/dist .
 
 # RUN npm install pm2 -g
 
 EXPOSE 80
 
 # CMD ["pm2-runtime","server.js"]
-CMD ["npm", "start:prod"]
+# CMD ["npm", "start:prod"]
