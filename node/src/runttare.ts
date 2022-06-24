@@ -18,6 +18,10 @@ export default class Runttare {
     this.wss = ws;
   }
 
+  getStatus() {
+    return this.busy;
+  }
+
   async runtta() {
     this.changeStatus();
 

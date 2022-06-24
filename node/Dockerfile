@@ -1,8 +1,8 @@
 # ------------------------------------------------------------
 # Base layer
 # ------------------------------------------------------------
-# FROM arm32v6/node:16-alpine3.15 as base
-FROM node:10-alpine as base
+# FROM arm32v6/node:11.15-alpine3.15 as base
+FROM node:11.15.0-alpine as base
 # FROM balenalib/raspberrypi3-node:16 as base
 # FROM balenalib/raspberrypi3-node:16
 

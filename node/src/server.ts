@@ -3,8 +3,8 @@ import expressWs, {Application, Instance} from 'express-ws';
 import WebSocket from 'ws';
 
 import Runttare from './runttare';
-import {createTable, getCount} from './db';
-import {RunttaMsg, countMsg} from './msg';
+// import {createTable, getCount} from './db';
+import {RunttaMsg, countMsg, statusMsg} from './msg';
 
 const wsInstance: Instance = expressWs(express());
 const app: Application = wsInstance.app;
@@ -25,12 +25,12 @@ app.get('/runtta', (req, res) => {
 
 app.ws('/ws', async function(ws: WebSocket, req) {
   // Send initial value on connect
-  const msg: RunttaMsg = countMsg(await getCount());
+  const msg: RunttaMsg = statusMsg(runttare.getStatus());
 
   ws.send(JSON.stringify(msg));
 });
 
 app.listen(PORT, () => {
-  createTable();
+  // createTable();
   console.log(`Server is listening on port ${PORT}`);
 });
