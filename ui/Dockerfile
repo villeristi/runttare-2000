@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 
 RUN apk --no-cache add g++ make libpng-dev
 
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm i
 COPY . ./
 RUN npm run build
