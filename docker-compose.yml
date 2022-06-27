@@ -8,12 +8,14 @@ services:
     container_name: api
     restart: on-failure
     privileged: true
-    # command: bash -c "uvicorn src.main:app --host=0.0.0.0 --port=8000 --log-level=debug --reload --reload-dir=./src --use-colors --workers 4"
     command: npm run start
     volumes:
       - ./node:/app/
     ports:
       - "8000:8000"
+    volumes:
+      - /sys/devices/platform/soc/3f200000.gpio:/sys/devices/platform/soc/3f200000.gpio
+      - /sys/class/gpio:/sys/class/gpio
     environment:
       - "RUNTTA_TIMEOUT=3"
 
