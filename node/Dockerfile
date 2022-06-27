@@ -2,9 +2,10 @@
 # Base layer
 # ------------------------------------------------------------
 # FROM arm32v6/node:11.15-alpine3.15 as base
-FROM node:11.15.0-alpine as base
+# FROM node:11.15.0-alpine as base
 # FROM balenalib/raspberrypi3-node:16 as base
 # FROM balenalib/raspberrypi3-node:16
+FROM node:16.14-alpine as base
 
 # RUN apk add --no-cache python3 py3-pip
 RUN apk add --no-cache g++ make py3-pip
