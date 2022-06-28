@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 import process from 'process';
 import {Gpio, High, Low} from 'onoff';
 
-// import { getCount, increment } from './db';
+import { getCount, increment } from './db';
 import {RunttaMsg, MsgType, StatusType, statusMsg, countMsg} from './msg';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
@@ -36,8 +36,8 @@ export default class Runttare {
 
   async sendSuccess () {
     this.changeStatus();
-    // await increment();
-    // this.broadcast(countMsg(await getCount()));
+    await increment();
+    this.broadcast(countMsg(await getCount()));
   }
 
   changeStatus() {

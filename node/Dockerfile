@@ -4,7 +4,6 @@
 # FROM arm32v6/node:11.15-alpine3.15 as base
 # FROM node:11.15.0-alpine as base
 # FROM balenalib/raspberrypi3-node:16 as base
-# FROM balenalib/raspberrypi3-node:16
 FROM node:16.14-alpine as base
 
 # RUN apk add --no-cache python3 py3-pip
@@ -20,6 +19,7 @@ COPY tsconfig.json ./
 COPY . ./
 
 RUN npm install
+
 RUN npm run build
 
 
@@ -31,9 +31,9 @@ FROM base as development
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+
 RUN npm install
 
-# CMD ["npm", "run", "start"]
 CMD npm start
 
 
@@ -48,11 +48,10 @@ COPY package.json ./
 
 RUN npm install --only=production
 
-COPY --from=base /app/dist .
+COPY --from=base /usr/src/app/dist .
 
-# RUN npm install pm2 -g
+RUN npm install pm2@latest -g
 
-EXPOSE 80
+EXPOSE 8000
 
-# CMD ["pm2-runtime","server.js"]
-# CMD ["npm", "start:prod"]
+CMD ["pm2-runtime", "./dist/server.js"]

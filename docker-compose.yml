@@ -4,18 +4,17 @@ services:
   api:
     build:
       context: ./node
-      target: development
+      target: production
     container_name: api
     restart: on-failure
     privileged: true
-    command: npm run start
     volumes:
       - ./node:/app/
     ports:
       - "8000:8000"
-    volumes:
-      - /sys/devices/platform/soc/3f200000.gpio:/sys/devices/platform/soc/3f200000.gpio
-      - /sys/class/gpio:/sys/class/gpio
+    # volumes:
+    #   - /sys/devices/platform/soc/3f200000.gpio:/sys/devices/platform/soc/3f200000.gpio
+    #   - /sys/class/gpio:/sys/class/gpio
     environment:
       - "RUNTTA_TIMEOUT=3"
 
@@ -31,8 +30,8 @@ services:
     ports:
       - "3000:80"
     environment:
-      - "REACT_APP_BROKER_URL=ws://localhost:8000/ws"
-      - "REACT_APP_API_URL=http://localhost:8000/runtta"
+      - "REACT_APP_BROKER_URL=ws://runttare.local:8000/ws"
+      - "REACT_APP_API_URL=http://runttare.local:8000/runtta"
     depends_on:
       - api
 

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon --quiet --watch src --watch ./package.json",
-    "start:prod": "node build/server.js"
+    "start:prod": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "express-ws": "^5.0.2",
     "onoff": "^6.0.3",
     "sqlite": "^4.1.1",
+    "sqlite3": "^5.0.8",
     "ts-node": "^10.8.1",
     "tslib": "^2.4.0"
   },
