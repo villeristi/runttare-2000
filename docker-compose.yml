@@ -16,7 +16,9 @@ services:
     #   - /sys/devices/platform/soc/3f200000.gpio:/sys/devices/platform/soc/3f200000.gpio
     #   - /sys/class/gpio:/sys/class/gpio
     environment:
-      - "RUNTTA_TIMEOUT=3"
+      - "RUNTTA_TIMEOUT=3000"
+      - "RUNTTA_STATUS_PIN=3"
+      - "RUNTTA_PISTON_PIN=3"
 
   ui:
     container_name: ui
@@ -30,8 +32,8 @@ services:
     ports:
       - "3000:80"
     environment:
-      - "REACT_APP_BROKER_URL=ws://runttare.local:8000/ws"
-      - "REACT_APP_API_URL=http://runttare.local:8000/runtta"
+      - "REACT_APP_BROKER_URL=ws://localhost:8000/ws"
+      - "REACT_APP_API_URL=http://localhost:8000/runtta"
     depends_on:
       - api
 

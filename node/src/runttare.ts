@@ -5,10 +5,14 @@ import {Gpio, High, Low} from 'onoff';
 import { getCount, increment } from './db';
 import {RunttaMsg, MsgType, StatusType, statusMsg, countMsg} from './msg';
 
+const PISTON_PIN = Number(process.env.RUNTTA_PISTON_PIN) || 17;
+const STATUS_PIN = Number(process.env.RUNTTA_PISTON_PIN) || 27;
+const RUNTTA_TIMEOUT = Number(process.env.RUNTTA_TIMEOUT) || 3000;
+
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-export const pistonPin = new Gpio(17, 'out');
-export const statusPin = new Gpio(4, 'out');
+export const pistonPin = new Gpio(PISTON_PIN, 'out');
+export const statusPin = new Gpio(STATUS_PIN, 'out');
 
 export default class Runttare {
   private wss: WebSocket.Server;
@@ -27,7 +31,7 @@ export default class Runttare {
 
     pistonPin.writeSync(1);
 
-    await sleep(3000);
+    await sleep(RUNTTA_TIMEOUT);
 
     pistonPin.writeSync(0);
 

@@ -1,3 +1,4 @@
+import process from 'process';
 import React, { useState, useCallback } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import useAxios from 'axios-hooks'
