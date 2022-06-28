@@ -10,6 +10,7 @@ services:
     privileged: true
     volumes:
       - ./node:/usr/src/app
+      - ./runtta.db:/usr/src/app/dist/runtta.rb
       - /usr/src/app/dist/
       - /usr/src/app/node_modules/
     ports:
