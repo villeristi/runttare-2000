@@ -7,8 +7,8 @@ import RunttaBtn from './components/RunttaBtn';
 
 import './components/runtta.css';
 
-const SOCKET_URL = process.env.REACT_APP_BROKER_URL;
-const API_URL = process.env.REACT_APP_API_URL;
+const SOCKET_URL = process.env.REACT_APP_BROKER_URL || 'ws://localhost:8000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/runtta';
 
 interface RunttaMsg {
   type: 'status' | 'count';

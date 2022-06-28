@@ -26,8 +26,8 @@ services:
       context: ./ui
       target: production
       args:
-        - API_URL=http://runttare.local:8000/runtta
-        - BROKER_URL=ws://runttare.local:8000/ws
+        API_URL: http://runttare.local:8000/runtta
+        BROKER_URL: ws://runttare.local:8000/ws
     restart: on-failure
     volumes:
       - ./ui:/usr/src/app/
