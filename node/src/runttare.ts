@@ -20,7 +20,6 @@ export default class Runttare {
 
   constructor(ws: WebSocket.Server) {
     this.wss = ws;
-    statusPin.writeSync(1);
   }
 
   getStatus() {

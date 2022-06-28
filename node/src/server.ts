@@ -3,7 +3,7 @@ import cors from 'cors';
 import expressWs, {Application, Instance} from 'express-ws';
 import WebSocket from 'ws';
 
-import Runttare from './runttare';
+import Runttare, {statusPin} from './runttare';
 import {createTable, getCount} from './db';
 import {RunttaMsg, countMsg} from './msg';
 
@@ -43,5 +43,6 @@ app.ws('/ws', async function(ws: WebSocket, req) {
 
 app.listen(PORT, () => {
   createTable();
+  statusPin.writeSync(1);
   console.log(`Server is listening on port ${PORT}`);
 });
