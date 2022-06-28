@@ -20,8 +20,8 @@ services:
     #   - /sys/class/gpio:/sys/class/gpio
     environment:
       - "RUNTTA_TIMEOUT=3000"
-      - "RUNTTA_STATUS_PIN=3"
-      - "RUNTTA_PISTON_PIN=3"
+      - "RUNTTA_PISTON_PIN=17"
+      - "RUNTTA_STATUS_PIN=27"
 
   ui:
     container_name: ui

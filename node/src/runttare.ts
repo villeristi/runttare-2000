@@ -6,7 +6,7 @@ import { getCount, increment } from './db';
 import {RunttaMsg, MsgType, StatusType, statusMsg, countMsg} from './msg';
 
 const PISTON_PIN = Number(process.env.RUNTTA_PISTON_PIN) || 17;
-const STATUS_PIN = Number(process.env.RUNTTA_PISTON_PIN) || 27;
+const STATUS_PIN = Number(process.env.RUNTTA_STATUS_PIN) || 27;
 const RUNTTA_TIMEOUT = Number(process.env.RUNTTA_TIMEOUT) || 3000;
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
@@ -20,6 +20,7 @@ export default class Runttare {
 
   constructor(ws: WebSocket.Server) {
     this.wss = ws;
+    statusPin.writeSync(1);
   }
 
   getStatus() {
