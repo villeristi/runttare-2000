@@ -2,11 +2,10 @@ version: "3"
 services:
 
   api:
-    image: villeristi/runttare-api:latest
-    container_name: api
     build:
       context: ./node
       target: production
+    container_name: api
     restart: on-failure
     privileged: true
     volumes:
@@ -25,7 +24,6 @@ services:
       - "RUNTTA_STATUS_PIN=27"
 
   ui:
-    image: villeristi/runttare-ui:latest
     container_name: ui
     build:
       context: ./ui

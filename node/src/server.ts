@@ -19,11 +19,11 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   return res
-          .status(200)
-          .send({
-            app: 'Runttare 2000',
-            version: '0.1.0',
-          });
+    .status(200)
+    .send({
+      app: 'Runttare 2000',
+      version: '0.1.0',
+    });
 });
 
 app.put('/runtta', (req: Request, res: Response) => {
