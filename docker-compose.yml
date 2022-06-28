@@ -15,22 +15,28 @@ services:
     # volumes:
     #   - /sys/devices/platform/soc/3f200000.gpio:/sys/devices/platform/soc/3f200000.gpio
     #   - /sys/class/gpio:/sys/class/gpio
-    env_file:
-      - .env
+    environment:
+      - "RUNTTA_TIMEOUT=3000"
+      - "RUNTTA_STATUS_PIN=3"
+      - "RUNTTA_PISTON_PIN=3"
 
   ui:
     container_name: ui
     build:
       context: ./ui
       target: production
+      args:
+        - API_URL=http://runttare.local:8000/runtta
+        - BROKER_URL=ws://runttare.local:8000/ws
     restart: on-failure
     volumes:
       - ./ui:/usr/src/app/
       - /usr/src/app/node_modules/
     ports:
       - "80:80"
-    env_file:
-      - .env
+    environment:
+      - "REACT_APP_API_URL=http://runttare.local:8000/runtta"
+      - "REACT_APP_BROKER_URL=ws://runttare.local:8000/ws"
     depends_on:
       - api
 

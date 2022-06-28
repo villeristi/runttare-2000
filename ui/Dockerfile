@@ -10,8 +10,17 @@ WORKDIR /usr/src/app
 RUN apk --no-cache add g++ make libpng-dev
 
 COPY package*.json ./
+
 RUN npm i
+
 COPY . ./
+
+ARG API_URL
+ARG BROKER_URL
+
+ENV REACT_APP_API_URL=$API_URL
+ENV REACT_APP_BROKER_URL=$BROKER_URL
+
 RUN npm run build
 
 
