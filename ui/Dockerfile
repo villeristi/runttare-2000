@@ -1,7 +1,7 @@
 # ------------------------------------------------------------
 # Base layer
 # ------------------------------------------------------------
-FROM node:16.14-alpine as base
+FROM arm32v7/node:16-alpine3.15 as base
 
 LABEL maintainer="Wille <villeristimaki@gmail.com>"
 
@@ -38,8 +38,8 @@ CMD npm start
 # ------------------------------------------------------------
 # Production-stage - nginx-proxy
 # ------------------------------------------------------------
-# FROM arm32v6/nginx:1.21.6-alpine as production
-FROM nginx:1.21.6-alpine as production
+FROM arm32v7/nginx:1.21.6-alpine as production
+# FROM nginx:1.21.6-alpine as production
 
 RUN addgroup --system node_app \
     && adduser --system --ingroup node_app node_app

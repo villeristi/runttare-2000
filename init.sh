@@ -2,8 +2,8 @@
 
 set -ex
 
-# Build docker-compose
-docker compose build --no-cache
+# Pull images
+docker compose pull
 
 # Move runttare.service to system-folder
 sudo cp ./service/runttare.service /etc/systemd/system/runttare.service

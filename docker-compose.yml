@@ -10,15 +10,9 @@ services:
     restart: on-failure
     privileged: true
     volumes:
-      - ./node:/usr/src/app
       - ./runtta.db:/usr/src/app/dist/runtta.rb
-      - /usr/src/app/dist/
-      - /usr/src/app/node_modules/
     ports:
       - "8000:8000"
-    # volumes:
-    #   - /sys/devices/platform/soc/3f200000.gpio:/sys/devices/platform/soc/3f200000.gpio
-    #   - /sys/class/gpio:/sys/class/gpio
     environment:
       - "RUNTTA_TIMEOUT=3000"
       - "RUNTTA_PISTON_PIN=17"
