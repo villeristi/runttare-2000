@@ -1,4 +1,5 @@
-import express from 'express'
+import express, {Request, Response} from 'express'
+import cors from 'cors';
 import expressWs, {Application, Instance} from 'express-ws';
 import WebSocket from 'ws';
 
@@ -13,12 +14,22 @@ const PORT = 8000;
 const wss = wsInstance.getWss();
 const runttare = new Runttare(wss);
 
+app.use(cors());
 app.use(express.json());
 
-app.get('/runtta', (req, res) => {
+app.get('/', (req, res) => {
+  return res
+          .status(200)
+          .send({
+            app: 'Runttare 2000',
+            version: '0.1.0',
+          });
+});
+
+app.put('/runtta', (req: Request, res: Response) => {
   runttare.runtta()
 
-  res
+  return res
     .status(202)
     .send('OK');
 });
