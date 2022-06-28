@@ -9,7 +9,8 @@ services:
     restart: on-failure
     privileged: true
     volumes:
-      - ./node:/app/
+      - ./node:/usr/src/app
+      - /usr/src/app/node_modules/
     ports:
       - "8000:8000"
     # volumes:
