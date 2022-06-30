@@ -5,7 +5,7 @@ services:
     image: villeristi/runttare-api:latest
     container_name: api
     build:
-      context: ./node
+      context: ./api
       target: production
     restart: on-failure
     privileged: true

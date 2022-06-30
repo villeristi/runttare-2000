@@ -1,60 +1,26 @@
 # ------------------------------------------------------------
 # Base layer
 # ------------------------------------------------------------
-FROM python:3.9-slim as base
+FROM arm32v7/node:16-alpine3.15 as base
+# FROM node:11.15.0-alpine as base
+# FROM balenalib/raspberrypi3-node:16 as base
+# FROM node:16.14-alpine as base
 
-LABEL maintainer="Wille <villeristimaki@gmail.com>"
+# RUN apk add --no-cache python3 py3-pip
+RUN apk add --no-cache g++ make py3-pip
+# RUN apt-get update && apt-get install -yq \
+#     alsa-utils libasound2-dev build-essential python3-dev && \
+#    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONPATH=/app
-ENV PYTHONUNBUFFERED 1
-ENV TINI_VERSION v0.19.0
+WORKDIR /usr/src/app
 
-RUN apt-get update -y && apt-get install -y \
-    python3-dev \
-    build-essential \
-    libffi-dev \
-    git
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY . ./
 
-# RUN apt-get remove -y rustc cargo
-RUN apt-get autoremove -y
+RUN npm install
 
-# ENV PATH="$HOME/.cargo/bin:$PATH"
-# RUN curl https://sh.rustup.rs -sSf | sh
-# # ENV PATH="/root/.cargo/bin:${PATH}"
-# RUN . $HOME/.cargo/env
-# RUN rustc -V
-
-RUN addgroup --system fastapi \
-    && adduser --system --ingroup fastapi fastapi
-
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir poetry==1.1.*
-
-COPY poetry.lock pyproject.toml /
-
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-
-RUN chmod +x /tini
-
-
-# ------------------------------------------------------------
-# Production-stage - no dev-dependencies & clear cache
-# ------------------------------------------------------------
-FROM base as production
-
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-root \
-    && rm -rf ~/.cache
-
-COPY --chown=fastapi:fastapi . /app
-
-USER fastapi
-
-WORKDIR /app
-
-ENTRYPOINT ["/tini", "--"]
-
-CMD gunicorn src.main:app -c gunicorn_config.py
+RUN npm run build
 
 
 # ------------------------------------------------------------
@@ -62,15 +28,30 @@ CMD gunicorn src.main:app -c gunicorn_config.py
 # ------------------------------------------------------------
 FROM base as development
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-root
+WORKDIR /usr/src/app
 
-COPY --chown=fastapi:fastapi . /app
+COPY package*.json ./
 
-USER fastapi
+RUN npm install
 
-WORKDIR /app
+CMD npm start
 
-ENTRYPOINT ["/tini", "--"]
 
-CMD gunicorn src.main:app -c gunicorn_config.py
+# ------------------------------------------------------------
+# Production-stage
+# ------------------------------------------------------------
+FROM base as production
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install --only=production
+
+COPY --from=base /usr/src/app/dist .
+
+RUN npm install pm2@latest -g
+
+EXPOSE 8000
+
+CMD ["pm2-runtime", "./dist/server.js"]
