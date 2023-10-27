@@ -1,7 +1,9 @@
-# ------------------------------------------------------------
-# Base layer
-# ------------------------------------------------------------
-FROM arm32v7/node:16-alpine3.15 as base
+ARG BASE_IMG=arm32v7/node:18-alpine3.17
+ARG BASE_IMG_PROXY=arm32v7/nginx:1.21.6-alpine
+
+
+# base ------------------------------
+FROM $BASE_IMG AS base
 
 LABEL maintainer="Wille <villeristimaki@gmail.com>"
 
@@ -15,19 +17,15 @@ RUN npm i
 
 COPY . ./
 
-ARG API_URL
 ARG BROKER_URL
 
-ENV REACT_APP_API_URL=$API_URL
 ENV REACT_APP_BROKER_URL=$BROKER_URL
 
 RUN npm run build
 
 
-# ------------------------------------------------------------
-# Development-stage
-# ------------------------------------------------------------
-FROM base as development
+# dev ------------------------------
+FROM base AS development
 
 WORKDIR /usr/src/app
 
@@ -35,11 +33,9 @@ RUN npm i
 
 CMD npm start
 
-# ------------------------------------------------------------
-# Production-stage - nginx-proxy
-# ------------------------------------------------------------
-FROM arm32v7/nginx:1.21.6-alpine as production
-# FROM nginx:1.21.6-alpine as production
+
+# production - nginx-proxy ---------
+FROM $BASE_IMG_PROXY as production
 
 RUN addgroup --system node_app \
     && adduser --system --ingroup node_app node_app

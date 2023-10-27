@@ -39,31 +39,30 @@ services:
       nats:
         condition: service_started
 
-  # ui:
-  #   image: villeristi/runttare-ui:latest
-  #   container_name: runttare-ui
-  #   build:
-  #     context: ./ui
-  #     target: development
-  #     args:
-  #       BROKER_URL: ws://localhost:4280
-  #       BASE_IMG: node:18-alpine3.17
-  #   restart: on-failure
-  #   volumes:
-  #     - ./ui:/usr/src/app/
-  #     - /usr/src/app/node_modules/
-  #   ports:
-  #     - 5000:3000
-  #   environment:
-  #     - REACT_APP_BROKER_URL=ws://localhost:4280
-  #   networks:
-  #     - runttare
-  #   depends_on:
-  #     nats:
-  #       condition: service_started
-  #     worker:
-  #       condition: service_started
-
+  ui:
+    image: villeristi/runttare-ui:latest
+    container_name: runttare-ui
+    build:
+      context: ./ui
+      target: development
+      args:
+        BROKER_URL: ws://localhost:4280
+        BASE_IMG: node:18-alpine3.17
+    restart: on-failure
+    volumes:
+      - ./ui:/usr/src/app/
+      - /usr/src/app/node_modules/
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_BROKER_URL=ws://localhost:4280
+    networks:
+      - runttare
+    depends_on:
+      nats:
+        condition: service_started
+      worker:
+        condition: service_started
 
 volumes:
   container-data:
