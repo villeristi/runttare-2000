@@ -1,48 +1,72 @@
 version: "3"
 services:
+  nats:
+    image: arm32v7/nats:2.9.15
+    container_name: runttare-nats
+    ports:
+      - "4222:4222"
+      - "4280:4280"
+      - "6222:6222"
+      - "8222:8222"
+    command: "-c /etc/nats/nats-server.conf"
+    volumes:
+      - ./conf/nats.conf:/etc/nats/nats-server.conf:ro
+    networks:
+      - runttare
 
-  api:
+  worker:
+    image: villeristi/runttare-worker:latest
+    container_name: runttare-worker
     build:
-      context: ./api
-      target: production
-    container_name: api
+      context: ./worker
+      target: development
+      args:
+        BASE_IMG: golang:1.21.1-bullseye
     restart: on-failure
     privileged: true
     volumes:
-      - ./api:/usr/src/app
-      - ./runtta.db:/usr/src/app/dist/runtta.db
-      - /usr/src/app/dist/
-      - /usr/src/app/node_modules/
-    ports:
-      - "8000:8000"
+      - ./worker:/app
     environment:
-      - "RUNTTA_TIMEOUT=3000"
-      - "RUNTTA_PISTON_PIN=17"
-      - "RUNTTA_STATUS_PIN=27"
+      - RUNTTARE_PIN_PISTON=17
+      - RUNTTARE_PIN_STATUS=27
+      - RUNTTARE_PIN_ACK=22
+      - RUNTTARE_SIMULATE=true
+      - RUNTTARE_TIMEOUT=3 # Seconds
+      - RUNTTARE_NATS_SERVER=nats://nats:4222
+    networks:
+      - runttare
+    depends_on:
+      nats:
+        condition: service_started
 
   ui:
-    container_name: ui
+    image: villeristi/runttare-ui:latest
+    container_name: runttare-ui
     build:
       context: ./ui
-      target: production
+      target: development
       args:
-        API_URL: http://runttare.local:8000/runtta
-        BROKER_URL: ws://runttare.local:8000/ws
+        BROKER_URL: ws://localhost:4280
+        BASE_IMG: node:18-alpine3.17
     restart: on-failure
     volumes:
       - ./ui:/usr/src/app/
       - /usr/src/app/node_modules/
     ports:
-      - "80:80"
+      - 3000:3000
     environment:
-      - "REACT_APP_API_URL=http://runttare.local:8000/runtta"
-      - "REACT_APP_BROKER_URL=ws://runttare.local:8000/ws"
+      - REACT_APP_BROKER_URL=ws://localhost:4280
+    networks:
+      - runttare
     depends_on:
-      - api
+      nats:
+        condition: service_started
+      worker:
+        condition: service_started
 
 volumes:
   container-data:
 
 networks:
-  default:
+  runttare:
     name: runttare_network
