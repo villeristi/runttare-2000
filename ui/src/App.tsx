@@ -5,7 +5,6 @@ import {
   NatsConnection,
   StringCodec,
 } from "nats.ws";
-import 'react-toastify/dist/ReactToastify.css';
 
 import Header from './components/Header';
 import RunttaBtn from './components/RunttaBtn';
